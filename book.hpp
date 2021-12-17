@@ -1,89 +1,57 @@
-#ifndef _book_h_
-#define _book_h_
+#pragma once                                                    // include guard
 
 #include <iostream>
 #include <string>
 
-// The Book class encapsulates basic information about a book that could be sold
-// by a retailer such as Amazon or Barnes & Noble.
-class Book {
-  //
+
+
+
+class Book
+{
   // Insertion and Extraction Operators
-  //
+  friend std::ostream & operator<<( std::ostream & stream, Book const & book );
+  friend std::istream & operator>>( std::istream & stream, Book       & book );
 
-  friend std::ostream& operator<<(std::ostream& stream, const Book& book);
-  friend std::istream& operator>>(std::istream& stream, Book& book);
+  public:
+    // Constructors, assignments, and destructor
+    Book( std::string title  = {},                              // Default and Conversion (from string to Book) constructor
+          std::string author = {},
+          std::string isbn   = {},
+          double      price  = 0.0 );
 
- public:
-  //
-  // Constructors, Assignments, and Destructor
-  //
+    Book & operator=( Book const  & rhs   ) &;                  // Assignment operators available only for l-values
+    Book            ( Book const  & other );                    // OK:  Book a{"title"},b;  b = a;  (a and b are both l-values, i.e. named objects)
+   ~Book            (                     )   noexcept;
 
-  Book(const std::string& title = {},
-       const std::string& author = {},
-       const std::string& isbn = {},
-       const double price = 0.0);
 
-  Book& operator=(const Book& rhs);
+    // Accessors
+    std::string const & isbn  () const &;                       // Returns object's state by constant reference for l-values
+    std::string const & title () const &;                       // (The & at the end says these functions can be called only for l-values)
+    std::string const & author() const &;
+    double              price () const &;
 
-  Book(const Book& other);
+    std::string isbn  () &&;                                    // Returns object's state by value for r-values (unsafe to return by reference)
+    std::string title () &&;                                    // (The && at the end says these functions can be called only for r-values)
+    std::string author() &&;
 
-  ~Book() noexcept;
+    // Modifiers                                                // Updates object's state and returns a reference to self (enables chaining)
+    Book & isbn  ( std::string newIsbn   ) &;
+    Book & title ( std::string newTitle  ) &;                   // Mutators available for l-values only   (The & at the end says these functions can be called only for l-values)
+    Book & author( std::string newAuthor ) &;                   // OK:     Book b; b.price(13.99);        (b is an l-value, i.e. a named object)
+    Book & price ( double      newPrice  ) &;                   // Error:  Book{}.price(13.99);           (Book{} is an r-value, i.e., an unnamed temporary object)
 
-  //
-  // Accessors
-  //
 
-  const std::string& isbn () const;
-  const std::string& title () const;
-  const std::string& author() const;
-  double price () const;
+    // Relational Operators
+    bool               operator== ( Book const & rhs ) const noexcept;
+    bool               operator!= ( Book const & rhs ) const noexcept;
+    bool               operator<  ( Book const & rhs ) const noexcept;
+    bool               operator<= ( Book const & rhs ) const noexcept;
+    bool               operator>  ( Book const & rhs ) const noexcept;
+    bool               operator>= ( Book const & rhs ) const noexcept;
 
-  std::string isbn();
-  std::string title();
-  std::string author();
-
-  //
-  // Modifiers
-  //
-
-  Book& isbn (const std::string& new_isbn);
-  Book& title (const std::string& new_title);
-  Book& author(const std::string& new_author);
-  Book& price (double new_price);
-
-  //
-  // Relational Operators
-  //
-
-  bool operator==(const Book& rhs) const noexcept;
-  bool operator!=(const Book& rhs) const noexcept;
-  bool operator<(const Book& rhs) const noexcept;
-  bool operator<=(const Book& rhs) const noexcept;
-  bool operator>(const Book& rhs) const noexcept;
-  bool operator>=(const Book& rhs) const noexcept;
-
- private:
-  // The 10 or 13 character international standard book number uniquely
-  // identifying this book.
-  //
-  // Examples: "9790619213090" or "979010181X".
-  std::string isbn_;
-
-  // The name of the book.
-  //
-  // Example: "An Introduction to Programming with C++".
-  std::string title_;
-
-  // The book's author.
-  //
-  // Example: "Diane Zak".
-  std::string author_;
-
-  // The cost of the book in US dollars.
-  //
-  // Example: 31.99.
-  double price_ = 0.0;
+  private:
+    std::string _isbn;                                          // a 10 or 13 character international standard book number uniquely identifying this book (Ex: 9790619213090,  979010181X).
+    std::string _title;                                         // the name of the book (Ex: An Introduction to Programming with C++,  Data structures for particle physics experiments)
+    std::string _author;                                        // the book�s author (Ex: Diane Zak,  Alison "Ally" Uttley)
+    double      _price = 0.0;                                   // the cost of the book in US Dollars (Ex:  74.99,  115.50)
 };
-
-#endif

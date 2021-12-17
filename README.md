@@ -2,11 +2,11 @@
 
 ## Information
 
-Name: Ada Lovelace
+Name: Zihua Yang
 
-Email: adalovelace@csu.fullerton.edu
+Email: zihuayang@csu.fullerton.edu
 
-Section: CPSC 131 - Section 03
+Section: CPSC 131 - Section 05
 
 Analysis Document Link: https://docs.google.com/document/d/1qfSJA8oD3_cpIqxJeWuRmZP6rkR9fSdDdLt5yjCRPQ4
 
